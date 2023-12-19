@@ -15,6 +15,42 @@
 </template>
 
 <script>
+import axios from 'axios'
+import ItemCart from '../../components/ItemCart'
+
+export default {
+    components: {
+        ItemCart
+    },
+    data() {
+        return {
+            cartItems : []
+        }
+    },
+    computed : {
+        totalPrice() {
+            // return 1;
+            return this.cartItems.reduce(
+                (sum, item) => sum + Number(item.price),
+                0
+            )
+        }
+    },
+    async created() {
+        const result = await axios.get('http://localhost:8000/api/orders/user/1')
+        let data = Object.assign({}, 
+            ...(result.data.map(
+                result => ({
+                    cart_items: result.products
+                })
+            ))
+        )
+        this.cartItems = data.cart_items
+    }
+}
+</script>
+
+<!-- <script>
 import { cartItems } from '../../data-seed'
 import ItemCart from '../../components/ItemCart'
 
@@ -39,7 +75,7 @@ export default {
         console.log(this.cartItems)
     }
 }
-</script>
+</script> -->
 
 <style scoped>
   h1 {

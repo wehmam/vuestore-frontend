@@ -7,7 +7,7 @@
 
           <div class="product-details">
               <h1>{{ product.name }}</h1>
-              <h3 id="price">Rp. {{ product.price }}</h3>
+              <h3>Rp. {{ product.price }}</h3>
               <p>Average Rating: {{ product.averageRating }}</p>
               <button id="add-to-cart">Add To Cart</button>
               <p>{{ product.description }}</p>
@@ -19,6 +19,29 @@
 </template>
 
 <script>
+  import NotFound from '../../views/errors/404View'
+  import axios from 'axios'
+
+  export default {
+      components: {
+          NotFound
+      },
+      data() {
+          return {
+              product : {}
+          }
+      },
+      async created() {
+          const code = this.$route.params.id
+          const result = await axios.get(`http://localhost:8000/api/products/${code}`)
+          this.product = result.data
+      }
+  }
+</script>
+
+
+<!-- this for using dataseed  (on file json) -->
+<!-- <script>
 import { products } from '../../data-seed'
 import NotFound from '../../views/errors/404View'
 
@@ -42,7 +65,7 @@ export default {
         console.log(this.product)
     }
 }
-</script>
+</script> -->
 
 <style scoped>
     #page-wrap {
