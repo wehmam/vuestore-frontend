@@ -9,7 +9,7 @@
               <h1>{{ product.name }}</h1>
               <h3>Rp. {{ product.price }}</h3>
               <p>Average Rating: {{ product.averageRating }}</p>
-              <button id="add-to-cart">Add To Cart</button>
+              <button id="add-to-cart" @click="addToCart(product.code)">Add To Cart</button>
               <p>{{ product.description }}</p>
           </div>
       </div>
@@ -30,6 +30,14 @@
           return {
               product : {}
           }
+      },
+      methods: {
+            async addToCart(code) {
+                await axios.post(`http://localhost:8000/api/orders/user/1/add`, {
+                    product_code: code 
+                })
+                alert("Success add to cart!")
+            }
       },
       async created() {
           const code = this.$route.params.id
